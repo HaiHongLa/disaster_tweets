@@ -1,3 +1,9 @@
 bot/creds.py
 bot/core-site-329315-921d4cbc1452.json
-bot/flask_api
+bot/flask_api/core-site-329315-921d4cbc1452.json
+bot/flask_api/creds.py
+result.csv
+sample_submission.csv
+test.csv
+train.csv
+bot/twitter_acc_info.txt
