@@ -42,47 +42,54 @@ class ScrapeTweets(Resource):
 
         search_words = "usa news"
         numTweets = 100
-        tweets = tweepy.Cursor(api.search_tweets, q=search_words, lang="en", tweet_mode='extended', result_type='recent').items(numTweets)
-        tweet_list = [tweet for tweet in tweets]
-
-        contents = set()
-
-        for tweet in tweet_list:
-        # Pull the values
+        while True:
             try:
-                text = tweet.retweeted_status.full_text
-            except AttributeError:  # Not a Retweet
-                text = tweet.full_text
+                tweets = tweepy.Cursor(api.search_tweets, q=search_words, lang="en", tweet_mode='extended', result_type='recent').items(numTweets)
+                tweet_list = [tweet for tweet in tweets]
 
-            if pipe.predict([text])[0] == 0:
-                continue
+                contents = set()
 
-            # Skip duplicate tweets
-            if str(text) not in contents:
-                contents.add(str(text))
-            else:
-                continue
-            
-            username = str(tweet.user.screen_name)
-            acctdesc = str(tweet.user.description)
-            location = str(tweet.user.location)
-            following = str(tweet.user.friends_count)
-            followers = str(tweet.user.followers_count)
-            totaltweets = str(tweet.user.statuses_count)
-            usercreatedts = str(tweet.user.created_at)
-            tweetcreatedts = str(tweet.created_at)
-            retweetcount = str(tweet.retweet_count)
-            hashtags = str(tweet.entities['hashtags'])
-                
+                # Start scraping
+                for tweet in tweet_list:
+                # Pull the values
+                    try:
+                        text = tweet.retweeted_status.full_text
+                    except AttributeError:  # Not a Retweet
+                        text = tweet.full_text
 
-            # Add the 11 variables to the empty list - ith_tweet:
-            ith_tweet = [username, acctdesc, location, following, followers, totaltweets,
-                        usercreatedts, tweetcreatedts, retweetcount, text, hashtags]
+                    if pipe.predict([text])[0] == 0:
+                        continue
 
-            # Append to Google Sheet
-            wks.insert_rows(2, 1, ith_tweet, False)
+                    # Skip duplicate tweets
+                    if str(text) not in contents:
+                        contents.add(str(text))
+                    else:
+                        continue
+                    
+                    username = str(tweet.user.screen_name)
+                    acctdesc = str(tweet.user.description)
+                    location = str(tweet.user.location)
+                    following = str(tweet.user.friends_count)
+                    followers = str(tweet.user.followers_count)
+                    totaltweets = str(tweet.user.statuses_count)
+                    usercreatedts = str(tweet.user.created_at)
+                    tweetcreatedts = str(tweet.created_at)
+                    retweetcount = str(tweet.retweet_count)
+                    hashtags = str(tweet.entities['hashtags'])
+                        
 
-        wks.update_row(1, ["Last retrieved", str(datetime.now().strftime("%d/%m/%Y %H:%M:%S"))], 0)
+                    # Add the 11 variables to the empty list - ith_tweet:
+                    ith_tweet = [username, acctdesc, location, following, followers, totaltweets,
+                                usercreatedts, tweetcreatedts, retweetcount, text, hashtags]
+
+                    # Append to Google Sheet
+                    wks.insert_rows(2, 1, ith_tweet, False)
+
+                wks.update_row(1, ["Last retrieved", str(datetime.now().strftime("%d/%m/%Y %H:%M:%S"))], 0)
+                # End scraping
+            except Exception as e:
+                print(str(e))
+                break
 
         return {'status': 200, 'message': 'Scraping done'}
 
