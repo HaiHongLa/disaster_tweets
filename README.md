@@ -15,7 +15,7 @@ A Flask API that detects disasters from news tweets on Twitter and save them in 
 - A Twitter API account and token
 ### API query
 
-http://127.0.0.1:5000/scrape-tweets
+/scrape-tweets
 
 ![/image/demo.png](https://github.com/HaiHongLa/disaster_tweets/blob/main/images/demo.png)
   
