@@ -15,9 +15,9 @@ A Flask API that detects disasters from news tweets on Twitter and save them in 
 - A Twitter API account and token
 ### API query
 
-http://<hostname>/scrape-tweets
+http://127.0.0.1:5000/scrape-tweets
 
-![Demo image](/image/demo.png)
+![/image/demo.png](https://github.com/HaiHongLa/disaster_tweets/blob/main/images/demo.png)
   
 ### The classifier
 The app uses Sklearn's Tfidf vectorizer and Support Vector Machine algorithm to classify tweets
