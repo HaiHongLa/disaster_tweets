@@ -7,3 +7,7 @@ flask/twitter_bot.py
 flask/twitter_acc_info.txt
 ./ipynb_checkpoints
 flask/__pycache__
+result.csv
+sample_submission.csv
+test.csv
+train.csv
